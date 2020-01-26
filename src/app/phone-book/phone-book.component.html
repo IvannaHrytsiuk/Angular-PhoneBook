@@ -1,0 +1,59 @@
+<div class="content">
+    <h1 class="header">My phone book</h1>
+    <hr>
+        <input type="text" class="form-control searchInput" [(ngModel)]="searchName" name="searchName" placeholder="Search contact here">
+        <button class="btn btn-warning" id="addButton" type="button" (click)="openModal(template)">Add phone</button>
+    <hr>
+    <ng-template #template>
+        <div class="modal-header">
+          <h4 class="modal-title pull-left">Add phone</h4>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input type="text" placeholder="First name here" class="form-control  newContactInput" [(ngModel)]="addNewFirstName" name="addNewFirstName">
+          <input type="text" placeholder="Second name here" class="form-control newContactInput" [(ngModel)]="addNewLastName" name="addNewLastName">
+          <input type="text" placeholder="Phone number here" class="form-control newContactInput" [(ngModel)]="addNewNumber" name="addNewNumber">
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-success saveButton" (click)="addNewContact()" (click)="modalRef.hide()">Save</button>
+        </div>
+      </ng-template>
+    <table class="table ">
+        <thead>
+            <tr>
+                <th scope="col" [class.active]="order === 'firstName'" (click)="setOrder('firstName')">First name<span [hidden]="reverse">▼</span><span [hidden]="!reverse">▲</span></th>
+                <th scope="col" [class.active]="order === 'lastName'" (click)="setOrder('lastName')">Last name <span [hidden]="reverse">▼</span><span [hidden]="!reverse">▲</span></th>
+                <th scope="col" [class.active]="order === 'number'" (click)="setOrder('number')">Number<span [hidden]="reverse">▼</span><span [hidden]="!reverse">▲</span></th>
+                <th scope="col">Edit</th>
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of arrUsers | orderBy: order:reverse:'case-insensitive' | search:searchName; let i = index ">
+                <td>{{user.firstName}}</td>
+                <td>{{user.lastName}}</td>
+                <td>{{user.number}}</td>
+                <td><button type='button' class='btn btn-warning'(click)="openModal(editModal,user.id)">Edit</button></td>
+                <td><button type='button' class='btn btn-danger' (click)="deleteContact(user.id)">Delete</button></td> 
+            </tr>
+        </tbody>
+    </table>
+    <ng-template #editModal>
+        <div class="modal-header">
+            <h4 class="modal-title pull-left">Add phone</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <input type="text" placeholder="First name here" class="form-control  newContactInput" [(ngModel)]="editFirstName" name="editFirstName">
+            <input type="text" placeholder="Second name here" class="form-control newContactInput" [(ngModel)]="editLastName" name="editLastName">
+            <input type="text" placeholder="Phone number here" class="form-control newContactInput" [(ngModel)]="editNumber" name="editNumber">
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-success saveButton" (click)="saveContact()">Save</button>
+        </div>
+    </ng-template>
+</div>
